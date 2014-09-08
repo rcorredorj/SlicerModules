@@ -28,6 +28,11 @@ class MyPythonModule(ScriptedLoadableModule):
 
 class MyPythonModuleWidget(ScriptedLoadableModuleWidget):
 
+  def __init__(self, parent=None):
+    self.parent = parent
+    self.logic = None
+    self.items=[]
+
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
     # Instantiate and connect widgets ...
@@ -48,6 +53,7 @@ class MyPythonModuleWidget(ScriptedLoadableModuleWidget):
     parametersCollapsibleLayout.addWidget(self.table)
     item = qt.QTableWidgetItem('Test');
     self.table.setItem(0,0,item);
+    self.items.append(item)
 
 
     #
