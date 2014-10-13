@@ -209,19 +209,25 @@ class DrawSplineEffectTool(LabelEffect.LabelEffectTool):
 
     # events from the interactor
     if event == "LeftButtonPressEvent":
-      if self.actionState != "editing"
+      if self.actionState != "editing":
         self.actionState = "drawing"
         self.cursorOff()
         xy = self.interactor.GetEventPosition()
         self.addPoint(self.logic.xyToRAS(xy))
         self.abortEvent(event)
     elif event == "LeftButtonReleaseEvent":
-      if self.actionState != "editing"
+      if self.actionState != "editing":
         self.actionState = "drawing"
         self.cursorOn()
     elif event == "RightButtonPressEvent":
       sliceNode = self.sliceWidget.sliceLogic().GetSliceNode()
       self.lastInsertSLiceNodeMTime = sliceNode.GetMTime()
+      xy = self.interactor.GetEventPosition()
+      self.addPoint(self.logic.xyToRAS(xy))
+      self.aSplineX.ClosedOn()
+      self.aSplineY.ClosedOn()
+      self.aSplineZ.ClosedOn()
+      self.repaint()
     elif event == "RightButtonReleaseEvent":
       sliceNode = self.sliceWidget.sliceLogic().GetSliceNode()
       if self.lastInsertSLiceNodeMTime == sliceNode.GetMTime():
@@ -425,7 +431,6 @@ class DrawSplineEffectTool(LabelEffect.LabelEffectTool):
         idArray.InsertNextTuple1(i)
       idArray.SetTuple1(0, idArray.GetNumberOfTuples()-1)
       lines.SetNumberOfCells(1)
-      print '.'
 
 #
 # DrawSplineEffectLogic
@@ -477,13 +482,6 @@ class DrawSplineEffectLogic(LabelEffect.LabelEffectLogic):
       pos = [0,0,0]
       fiducialList.GetNthFiducialPosition(movingIndex,pos)
       print pos
-      #self.pickLandmark(landmarkName,clearMovingView=False)
-      #self.emit("landmarkMoved(landmarkName)", (landmarkName,))
-  def removeLandmarkObservers(self):
-    """Remove any existing observers"""
-    for obj,tag in self.observerTags:
-      obj.RemoveObserver(tag)
-      self.observerTags = []
 
 
 #
